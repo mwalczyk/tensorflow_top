@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3F5BEECD-FA36-459F-91B8-BB481A67EF44}</ProjectGuid>
+    <RootNamespace>CPlusPlusTOPExample</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>TensorFlowTOP</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\$(Configuration)\$(Platform)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)build\$(Configuration)\$(Platform)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)build\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\$(Configuration)\$(Platform)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)build\$(Configuration)\$(Platform)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;COMPILER_MSVC;PLATFORM_WINDOWS</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(TENSORFLOW_BUILD);$(TENSORFLOW_BUILD)\..\..\..\..\;$(TENSORFLOW_BUILD)\external\zlib_archive;$(TENSORFLOW_BUILD)\external\gif_archive\giflib-5.1.4;$(TENSORFLOW_BUILD)\external\png_archive;$(TENSORFLOW_BUILD)\external\jpeg_archive;$(TENSORFLOW_BUILD)\external\lmdb;$(TENSORFLOW_BUILD)\external\eigen_archive;$(TENSORFLOW_BUILD)\..\..\..\..\third_party\eigen3;$(TENSORFLOW_BUILD)\gemmlowp\src\gemmlowp;$(TENSORFLOW_BUILD)\jsoncpp\src\jsoncpp;$(TENSORFLOW_BUILD)\external\farmhash_archive;$(TENSORFLOW_BUILD)\external\farmhash_archive\util;$(TENSORFLOW_BUILD)\external\highwayhash;$(TENSORFLOW_BUILD)\cub\src\cub;$(TENSORFLOW_BUILD)\external\nsync\public;$(TENSORFLOW_BUILD)\protobuf\src\protobuf\src;$(TENSORFLOW_BUILD)\re2\install\include;$(TENSORFLOW_BUILD)\external\sqlite;$(TENSORFLOW_BUILD)\grpc\src\grpc\include;$(TENSORFLOW_BUILD)\snappy\src\snappy</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4267;4244;4800;4503;4554;4996;4348;4018;4099;4146;4267;4305;4307;4715;4722;4723;4838;4309;4334;4003;4244;4267;4503;4506;4800;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;re2\src\re2\$(Configuration)\re2.lib;grpc\src\grpc\Release\grpc++_unsecure.lib;grpc\src\grpc\Release\grpc_unsecure.lib;grpc\src\grpc\Release\gpr.lib;zlib\install\lib\zlibstatic.lib;gif\install\lib\giflib.lib;png\install\lib\libpng12_static.lib;jpeg\install\lib\libjpeg.lib;lmdb\install\lib\lmdb.lib;jsoncpp\src\jsoncpp\src\lib_json\$(Configuration)\jsoncpp.lib;farmhash\install\lib\farmhash.lib;fft2d\\src\lib\fft2d.lib;highwayhash\install\lib\highwayhash.lib;nsync\install\lib\nsync.lib;snappy\src\snappy\Release\snappy.lib;protobuf\src\protobuf\Release\libprotobuf.lib;tf_cc.dir\Release\tf_cc.lib;tf_cc_ops.dir\Release\tf_cc_ops.lib;tf_cc_framework.dir\Release\tf_cc_framework.lib;tf_core_cpu.dir\Release\tf_core_cpu.lib;tf_core_direct_session.dir\Release\tf_core_direct_session.lib;tf_core_framework.dir\Release\tf_core_framework.lib;tf_core_kernels.dir\Release\tf_core_kernels.lib;tf_core_lib.dir\Release\tf_core_lib.lib;tf_core_ops.dir\Release\tf_core_ops.lib;tf_cc_while_loop.dir\Release\tf_cc_while_loop.lib;Release\tf_protos_cc.lib;sqlite\install\lib\sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/machine:x64 /ignore:4049 /ignore:4197 /ignore:4217 /ignore:4221 
+/WHOLEARCHIVE:tf_cc.lib
+/WHOLEARCHIVE:tf_cc_framework.lib
+/WHOLEARCHIVE:tf_cc_ops.lib
+/WHOLEARCHIVE:tf_core_cpu.lib
+/WHOLEARCHIVE:tf_core_direct_session.lib
+/WHOLEARCHIVE:tf_core_framework.lib
+/WHOLEARCHIVE:tf_core_kernels.lib
+/WHOLEARCHIVE:tf_core_lib.lib
+/WHOLEARCHIVE:tf_core_ops.lib 
+/WHOLEARCHIVE:libjpeg.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(TENSORFLOW_BUILD)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;COMPILER_MSVC;PLATFORM_WINDOWS</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(TENSORFLOW_BUILD);$(TENSORFLOW_BUILD)\..\..\..\..\;$(TENSORFLOW_BUILD)\external\zlib_archive;$(TENSORFLOW_BUILD)\external\gif_archive\giflib-5.1.4;$(TENSORFLOW_BUILD)\external\png_archive;$(TENSORFLOW_BUILD)\external\jpeg_archive;$(TENSORFLOW_BUILD)\external\lmdb;$(TENSORFLOW_BUILD)\external\eigen_archive;$(TENSORFLOW_BUILD)\..\..\..\..\third_party\eigen3;$(TENSORFLOW_BUILD)\gemmlowp\src\gemmlowp;$(TENSORFLOW_BUILD)\jsoncpp\src\jsoncpp;$(TENSORFLOW_BUILD)\external\farmhash_archive;$(TENSORFLOW_BUILD)\external\farmhash_archive\util;$(TENSORFLOW_BUILD)\external\highwayhash;$(TENSORFLOW_BUILD)\cub\src\cub;$(TENSORFLOW_BUILD)\external\nsync\public;$(TENSORFLOW_BUILD)\protobuf\src\protobuf\src;$(TENSORFLOW_BUILD)\re2\install\include;$(TENSORFLOW_BUILD)\external\sqlite;$(TENSORFLOW_BUILD)\grpc\src\grpc\include;$(TENSORFLOW_BUILD)\snappy\src\snappy</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4267;4244;4800;4503;4554;4996;4348;4018;4099;4146;4267;4305;4307;4715;4722;4723;4838;4309;4334;4003;4244;4267;4503;4506;4800;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;re2\src\re2\$(Configuration)\re2.lib;grpc\src\grpc\Release\grpc++_unsecure.lib;grpc\src\grpc\Release\grpc_unsecure.lib;grpc\src\grpc\Release\gpr.lib;zlib\install\lib\zlibstatic.lib;gif\install\lib\giflib.lib;png\install\lib\libpng12_static.lib;jpeg\install\lib\libjpeg.lib;lmdb\install\lib\lmdb.lib;jsoncpp\src\jsoncpp\src\lib_json\$(Configuration)\jsoncpp.lib;farmhash\install\lib\farmhash.lib;fft2d\\src\lib\fft2d.lib;highwayhash\install\lib\highwayhash.lib;nsync\install\lib\nsync.lib;snappy\src\snappy\Release\snappy.lib;protobuf\src\protobuf\Release\libprotobuf.lib;tf_cc.dir\Release\tf_cc.lib;tf_cc_ops.dir\Release\tf_cc_ops.lib;tf_cc_framework.dir\Release\tf_cc_framework.lib;tf_core_cpu.dir\Release\tf_core_cpu.lib;tf_core_direct_session.dir\Release\tf_core_direct_session.lib;tf_core_framework.dir\Release\tf_core_framework.lib;tf_core_kernels.dir\Release\tf_core_kernels.lib;tf_core_lib.dir\Release\tf_core_lib.lib;tf_core_ops.dir\Release\tf_core_ops.lib;tf_cc_while_loop.dir\Release\tf_cc_while_loop.lib;Release\tf_protos_cc.lib;sqlite\install\lib\sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/machine:x64 /ignore:4049 /ignore:4197 /ignore:4217 /ignore:4221 
+/WHOLEARCHIVE:tf_cc.lib
+/WHOLEARCHIVE:tf_cc_framework.lib
+/WHOLEARCHIVE:tf_cc_ops.lib
+/WHOLEARCHIVE:tf_core_cpu.lib
+/WHOLEARCHIVE:tf_core_direct_session.lib
+/WHOLEARCHIVE:tf_core_framework.lib
+/WHOLEARCHIVE:tf_core_kernels.lib
+/WHOLEARCHIVE:tf_core_lib.lib
+/WHOLEARCHIVE:tf_core_ops.lib 
+/WHOLEARCHIVE:libjpeg.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(TENSORFLOW_BUILD)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;COMPILER_MSVC;PLATFORM_WINDOWS</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(TENSORFLOW_BUILD);$(TENSORFLOW_BUILD)\..\..\..\..\;$(TENSORFLOW_BUILD)\external\zlib_archive;$(TENSORFLOW_BUILD)\external\gif_archive\giflib-5.1.4;$(TENSORFLOW_BUILD)\external\png_archive;$(TENSORFLOW_BUILD)\external\jpeg_archive;$(TENSORFLOW_BUILD)\external\lmdb;$(TENSORFLOW_BUILD)\external\eigen_archive;$(TENSORFLOW_BUILD)\..\..\..\..\third_party\eigen3;$(TENSORFLOW_BUILD)\gemmlowp\src\gemmlowp;$(TENSORFLOW_BUILD)\jsoncpp\src\jsoncpp;$(TENSORFLOW_BUILD)\external\farmhash_archive;$(TENSORFLOW_BUILD)\external\farmhash_archive\util;$(TENSORFLOW_BUILD)\external\highwayhash;$(TENSORFLOW_BUILD)\cub\src\cub;$(TENSORFLOW_BUILD)\external\nsync\public;$(TENSORFLOW_BUILD)\protobuf\src\protobuf\src;$(TENSORFLOW_BUILD)\re2\install\include;$(TENSORFLOW_BUILD)\external\sqlite;$(TENSORFLOW_BUILD)\grpc\src\grpc\include;$(TENSORFLOW_BUILD)\snappy\src\snappy</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4267;4244;4800;4503;4554;4996;4348;4018;4099;4146;4267;4305;4307;4715;4722;4723;4838;4309;4334;4003;4244;4267;4503;4506;4800;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;re2\src\re2\$(Configuration)\re2.lib;grpc\src\grpc\Release\grpc++_unsecure.lib;grpc\src\grpc\Release\grpc_unsecure.lib;grpc\src\grpc\Release\gpr.lib;zlib\install\lib\zlibstatic.lib;gif\install\lib\giflib.lib;png\install\lib\libpng12_static.lib;jpeg\install\lib\libjpeg.lib;lmdb\install\lib\lmdb.lib;jsoncpp\src\jsoncpp\src\lib_json\$(Configuration)\jsoncpp.lib;farmhash\install\lib\farmhash.lib;fft2d\\src\lib\fft2d.lib;highwayhash\install\lib\highwayhash.lib;nsync\install\lib\nsync.lib;snappy\src\snappy\Release\snappy.lib;protobuf\src\protobuf\Release\libprotobuf.lib;tf_cc.dir\Release\tf_cc.lib;tf_cc_ops.dir\Release\tf_cc_ops.lib;tf_cc_framework.dir\Release\tf_cc_framework.lib;tf_core_cpu.dir\Release\tf_core_cpu.lib;tf_core_direct_session.dir\Release\tf_core_direct_session.lib;tf_core_framework.dir\Release\tf_core_framework.lib;tf_core_kernels.dir\Release\tf_core_kernels.lib;tf_core_lib.dir\Release\tf_core_lib.lib;tf_core_ops.dir\Release\tf_core_ops.lib;tf_cc_while_loop.dir\Release\tf_cc_while_loop.lib;Release\tf_protos_cc.lib;sqlite\install\lib\sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/machine:x64 /ignore:4049 /ignore:4197 /ignore:4217 /ignore:4221 
+/WHOLEARCHIVE:tf_cc.lib
+/WHOLEARCHIVE:tf_cc_framework.lib
+/WHOLEARCHIVE:tf_cc_ops.lib
+/WHOLEARCHIVE:tf_core_cpu.lib
+/WHOLEARCHIVE:tf_core_direct_session.lib
+/WHOLEARCHIVE:tf_core_framework.lib
+/WHOLEARCHIVE:tf_core_kernels.lib
+/WHOLEARCHIVE:tf_core_lib.lib
+/WHOLEARCHIVE:tf_core_ops.lib 
+/WHOLEARCHIVE:libjpeg.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(TENSORFLOW_BUILD)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;COMPILER_MSVC;PLATFORM_WINDOWS</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(TENSORFLOW_BUILD);$(TENSORFLOW_BUILD)\..\..\..\..\;$(TENSORFLOW_BUILD)\external\zlib_archive;$(TENSORFLOW_BUILD)\external\gif_archive\giflib-5.1.4;$(TENSORFLOW_BUILD)\external\png_archive;$(TENSORFLOW_BUILD)\external\jpeg_archive;$(TENSORFLOW_BUILD)\external\lmdb;$(TENSORFLOW_BUILD)\external\eigen_archive;$(TENSORFLOW_BUILD)\..\..\..\..\third_party\eigen3;$(TENSORFLOW_BUILD)\gemmlowp\src\gemmlowp;$(TENSORFLOW_BUILD)\jsoncpp\src\jsoncpp;$(TENSORFLOW_BUILD)\external\farmhash_archive;$(TENSORFLOW_BUILD)\external\farmhash_archive\util;$(TENSORFLOW_BUILD)\external\highwayhash;$(TENSORFLOW_BUILD)\cub\src\cub;$(TENSORFLOW_BUILD)\external\nsync\public;$(TENSORFLOW_BUILD)\protobuf\src\protobuf\src;$(TENSORFLOW_BUILD)\re2\install\include;$(TENSORFLOW_BUILD)\external\sqlite;$(TENSORFLOW_BUILD)\grpc\src\grpc\include;$(TENSORFLOW_BUILD)\snappy\src\snappy</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4267;4244;4800;4503;4554;4996;4348;4018;4099;4146;4267;4305;4307;4715;4722;4723;4838;4309;4334;4003;4244;4267;4503;4506;4800;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;re2\src\re2\$(Configuration)\re2.lib;grpc\src\grpc\Release\grpc++_unsecure.lib;grpc\src\grpc\Release\grpc_unsecure.lib;grpc\src\grpc\Release\gpr.lib;zlib\install\lib\zlibstatic.lib;gif\install\lib\giflib.lib;png\install\lib\libpng12_static.lib;jpeg\install\lib\libjpeg.lib;lmdb\install\lib\lmdb.lib;jsoncpp\src\jsoncpp\src\lib_json\$(Configuration)\jsoncpp.lib;farmhash\install\lib\farmhash.lib;fft2d\\src\lib\fft2d.lib;highwayhash\install\lib\highwayhash.lib;nsync\install\lib\nsync.lib;snappy\src\snappy\Release\snappy.lib;protobuf\src\protobuf\Release\libprotobuf.lib;tf_cc.dir\Release\tf_cc.lib;tf_cc_ops.dir\Release\tf_cc_ops.lib;tf_cc_framework.dir\Release\tf_cc_framework.lib;tf_core_cpu.dir\Release\tf_core_cpu.lib;tf_core_direct_session.dir\Release\tf_core_direct_session.lib;tf_core_framework.dir\Release\tf_core_framework.lib;tf_core_kernels.dir\Release\tf_core_kernels.lib;tf_core_lib.dir\Release\tf_core_lib.lib;tf_core_ops.dir\Release\tf_core_ops.lib;tf_cc_while_loop.dir\Release\tf_cc_while_loop.lib;Release\tf_protos_cc.lib;sqlite\install\lib\sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalOptions>/machine:x64 /ignore:4049 /ignore:4197 /ignore:4217 /ignore:4221 
+/WHOLEARCHIVE:tf_cc.lib
+/WHOLEARCHIVE:tf_cc_framework.lib
+/WHOLEARCHIVE:tf_cc_ops.lib
+/WHOLEARCHIVE:tf_core_cpu.lib
+/WHOLEARCHIVE:tf_core_direct_session.lib
+/WHOLEARCHIVE:tf_core_framework.lib
+/WHOLEARCHIVE:tf_core_kernels.lib
+/WHOLEARCHIVE:tf_core_lib.lib
+/WHOLEARCHIVE:tf_core_ops.lib 
+/WHOLEARCHIVE:libjpeg.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(TENSORFLOW_BUILD)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="GL\glew.c" />
+    <ClCompile Include="GL\glewinfo.c" />
+    <ClCompile Include="TensorFlowTOP.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GL\glew.h" />
+    <ClInclude Include="GL\wglew.h" />
+    <ClInclude Include="Extensions.h" />
+    <ClInclude Include="Names.h" />
+    <ClInclude Include="TensorFlowTOP.h" />
+    <ClInclude Include="TOP_CPlusPlusBase.h" />
+    <ClInclude Include="CPlusPlus_Common.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
