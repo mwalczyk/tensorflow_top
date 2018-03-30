@@ -216,6 +216,7 @@
     <ClInclude Include="GL\wglew.h" />
     <ClInclude Include="Extensions.h" />
     <ClInclude Include="Names.h" />
+    <ClInclude Include="Shaders.h" />
     <ClInclude Include="TensorFlowTOP.h" />
     <ClInclude Include="TOP_CPlusPlusBase.h" />
     <ClInclude Include="CPlusPlus_Common.h" />

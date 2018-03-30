@@ -16,6 +16,7 @@
 #include <iostream>
 
 #include "Names.h"
+#include "Shaders.h"
 
 #include "tensorflow/cc/ops/const_op.h"
 #include "tensorflow/cc/ops/image_ops.h"
@@ -73,10 +74,17 @@ private:
 
 	GLuint createGlslProgram(const std::string& vertSrc, const std::string& fragSrc);
 	void loadModel(const std::string& path);
+	void allocateFbo();
+	void allocateTextures();
 
 	std::unique_ptr<tensorflow::Session> session;
 	GLuint program;
 	GLuint vao;
+	GLuint fbo;
+	GLuint inputTexture;
+	GLuint outputTexture;
+	size_t inputWidth;
+	size_t inputHeight;
 	const char* error;
 	bool runGraph;
 };

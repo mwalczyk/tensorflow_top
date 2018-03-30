@@ -174,8 +174,38 @@ void TensorFlowTOP::loadModel(const std::string& graphPath)
 	}
 }
 
+void TensorFlowTOP::allocateFbo()
+{
+	glCreateFramebuffers(1, &fbo);
+	glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, inputTexture, 0);
+
+	if (glCheckNamedFramebufferStatus(fbo, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		error = "Framebuffer incomplete.";
+	}
+}
+
+void TensorFlowTOP::allocateTextures() 
+{
+	glCreateTextures(GL_TEXTURE_2D, 1, &inputTexture);
+	glTextureParameteri(inputTexture, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTextureParameteri(inputTexture, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTextureParameteri(inputTexture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTextureParameteri(inputTexture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTextureStorage2D(inputTexture, 1, GL_RGBA8, 1000, 1);
+
+	glCreateTextures(GL_TEXTURE_2D, 1, &outputTexture);
+	glTextureParameteri(outputTexture, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTextureParameteri(outputTexture, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTextureParameteri(outputTexture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTextureParameteri(outputTexture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTextureStorage2D(outputTexture, 1, GL_R8, 1000, 1);
+}
+
 TensorFlowTOP::TensorFlowTOP(const OP_NodeInfo* info, TOP_Context* context) :
-	runGraph(false)
+	runGraph(false),
+	inputWidth(1280),
+	inputHeight(720)
 {
 #ifdef WIN32
 	static bool needGLEWInit = true;
@@ -188,53 +218,13 @@ TensorFlowTOP::TensorFlowTOP(const OP_NodeInfo* info, TOP_Context* context) :
 	}
 #endif
 
-	const GLchar* vertShaderSrc =
-		R"(#version 430 core								
-		
-		vec2 positions[6] = vec2[]( vec2(-1.0, -1.0),	// lower-left
-                                    vec2( 1.0, -1.0),	// lower-right
-									vec2( 1.0,  1.0),	// upper-right
-			
-									vec2(-1.0, -1.0),	// lower-left
-                                    vec2( 1.0,  1.0),	// upper-right
-									vec2(-1.0,  1.0));	// upper-left
-		
-		out VS_OUT 
-		{
-			vec2 uv;
-		} vs_out;
-
-		void main()									
-		{			
-			vs_out.uv = positions[gl_VertexID] * 0.5 + 0.5;
-									
-			gl_Position = vec4(positions[gl_VertexID], 0.0, 1.0);
-		}
-	)";
-
-	const GLchar* fragShaderSrc =
-		R"(#version 430 core	
-		
-		layout(binding = 0) uniform sampler2D u_input;
-		
-		in VS_OUT 
-		{
-			vec2 uv;
-		} fs_in;
-
-		layout(location = 0) out vec4 o_color;		
-						
-		void main()									
-		{												
-			o_color = texture(u_input, fs_in.uv);			
-		})";
-
 	program = createGlslProgram(vertShaderSrc, fragShaderSrc);
 
 	glCreateVertexArrays(1, &vao);
 
-	std::string graph_path = "C:/Users/michael.walczyk/Desktop/tensorflow_top/models/inception.pb";
-	loadModel(graph_path);
+	loadModel("C:/Users/michael.walczyk/Desktop/tensorflow_top/models/inception.pb");
+	allocateTextures();
+	allocateFbo();
 }
 
 TensorFlowTOP::~TensorFlowTOP()
@@ -249,6 +239,8 @@ void TensorFlowTOP::getGeneralInfo(TOP_GeneralInfo* ginfo)
 
 bool TensorFlowTOP::getOutputFormat(TOP_OutputFormat* format)
 {
+	//format->width = 1000;
+	//format->height = 1;
 	return false;
 }
 
@@ -257,10 +249,17 @@ void TensorFlowTOP::execute(const TOP_OutputFormatSpecs* outputFormat, OP_Inputs
 	auto topInput = inputs->getInputTOP(0);
 	if (topInput)
 	{	
-		// Draw the input texture.
-		context->beginGLCommands();
+		if (inputWidth != topInput->width || inputHeight != topInput->height)
 		{
-			glViewport(0, 0, outputFormat->width, outputFormat->height);
+			allocateTextures();
+			inputWidth = topInput->width;
+			inputHeight = topInput->height;
+		}
+
+		// Draw the input texture into this TOP's FBO.
+		context->beginGLCommands();
+		{		
+			glViewport(0, 0, topInput->width, topInput->height);
 			glClearColor(0.0, 0.0, 0.0, 0.0);
 			glClear(GL_COLOR_BUFFER_BIT);
 
@@ -275,6 +274,7 @@ void TensorFlowTOP::execute(const TOP_OutputFormatSpecs* outputFormat, OP_Inputs
 		// Tensors are interpretted top-down, so we need to flip the pixels here.
 		OP_TOPInputDownloadOptions options;
 		options.verticalFlip = true;
+		options.downloadType = OP_TOPInputDownloadType::Instant;
 
 		// Read pixels from GPU -> CPU.
 		uint8_t* pixels = static_cast<uint8_t*>(inputs->getTOPDataInCPUMemory(topInput, &options));
@@ -302,11 +302,31 @@ void TensorFlowTOP::execute(const TOP_OutputFormatSpecs* outputFormat, OP_Inputs
 				error = "Failed to run model on provided input.";
 			}
 
+			// Upload the output tensor's data store to a OpenGL texture.
+			/*auto tensor = outputs[0].flat<float>();
+			auto length = outputs[0].NumElements();
+			std::cout << "Uploading " << length << " elements\n";
+			context->beginGLCommands();
+			{
+				glTextureSubImage2D(texture, 0, 0, 0, length, 1, GL_RED, GL_UNSIGNED_BYTE, pixels);
+
+				glViewport(0, 0, outputFormat->width, outputFormat->height);
+				glClearColor(0.0, 0.0, 0.0, 0.0);
+				glClear(GL_COLOR_BUFFER_BIT);
+
+				glBindTextureUnit(0, texture);
+
+				glUseProgram(program);
+				glBindVertexArray(vao);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+			}
+			context->endGLCommands();*/
+
 			// Grab the index of the class with the highest score.
 			Eigen::Map<Eigen::VectorXf> pred(outputs[0].flat<float>().data(), outputs[0].NumElements());
 			int maxIndex; 
 			float maxValue = pred.maxCoeff(&maxIndex);
-
+			
 			std::cout << "Class with highest probability: " << classNames[maxIndex] << ", " << maxValue << "\n";
 		}
 	}
