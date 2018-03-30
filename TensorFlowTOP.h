@@ -56,10 +56,27 @@ public:
 	virtual void getInfoDATEntries(int32_t index, int32_t nEntries, OP_InfoDATEntries *entries) override;
 	virtual void setupParameters(OP_ParameterManager *manager) override;
 	virtual void pulsePressed(const char *name) override;
+	virtual const char* getErrorString() override;
 
 private:
+
+	Status convertPixelsToTensor(std::vector<Tensor>* out_tensors,
+								 uint8_t* pixels,
+								 int pixels_width,
+								 int pixels_height,
+								 int pixels_channels,
+								 const int expected_height,
+								 const int expected_width,
+								 const int expected_channels = 3,
+								 const float expected_mean = 128,
+								 const float expected_standard_dev = 128);
+
+	GLuint createGlslProgram(const std::string& vertSrc, const std::string& fragSrc);
+	void loadModel(const std::string& path);
 
 	std::unique_ptr<tensorflow::Session> session;
 	GLuint program;
 	GLuint vao;
+	const char* error;
+	bool runGraph;
 };

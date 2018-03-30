@@ -31,16 +31,16 @@ extern "C"
 	}
 };
 
-Status convertPixelsToTensor(std::vector<Tensor>* out_tensors,
-							 uint8_t* pixels,
-							 int pixels_width, 
-							 int pixels_height, 
-							 int pixels_channels,
-							 const int expected_height, 
-							 const int expected_width, 
-							 const int expected_channels = 3,
-							 const float expected_mean = 128,
-							 const float expected_standard_dev = 128) 
+Status TensorFlowTOP::convertPixelsToTensor(std::vector<Tensor>* out_tensors,
+											uint8_t* pixels,
+											int pixels_width, 
+											int pixels_height, 
+											int pixels_channels,
+											const int expected_height, 
+											const int expected_width, 
+											const int expected_channels,
+											const float expected_mean,
+											const float expected_standard_dev) 
 {
 	auto root = tensorflow::Scope::NewRootScope();
 	using namespace ::tensorflow::ops; 
@@ -83,11 +83,11 @@ Status convertPixelsToTensor(std::vector<Tensor>* out_tensors,
 	std::unique_ptr<tensorflow::Session> session(tensorflow::NewSession(tensorflow::SessionOptions()));
 	TF_RETURN_IF_ERROR(session->Create(graph));
 	TF_RETURN_IF_ERROR(session->Run({}, {output_name}, {}, out_tensors));
-
+	
 	return Status::OK();
 }
 
-GLuint createGlslProgram(const std::string& vertSrc, const std::string& fragSrc)
+GLuint TensorFlowTOP::createGlslProgram(const std::string& vertSrc, const std::string& fragSrc)
 {
 	// Vertex shader
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -139,7 +139,43 @@ GLuint createGlslProgram(const std::string& vertSrc, const std::string& fragSrc)
 	return program;
 }
 
-TensorFlowTOP::TensorFlowTOP(const OP_NodeInfo* info, TOP_Context* context)
+void TensorFlowTOP::loadModel(const std::string& graphPath)
+{
+	std::cout << "Attempting to load graph file...\n";
+
+	tensorflow::GraphDef graphDefinition;
+	if (!ReadBinaryProto(tensorflow::Env::Default(), graphPath, &graphDefinition).ok()) 
+	{
+		error = "Failed to read .pb file - check that the path and file format are correct.";
+	}
+	
+	// Print some information about this graph:
+	// `graphDefinition.node_size()` -> prints something like `1004`
+	for (size_t i = 0; i < 3; ++i)
+	{
+		auto node = graphDefinition.node(i);
+		std::cout << "Node at index " << i << " has name: " << node.name() << ", input size: " << node.input_size() << "\n";
+		for (const auto& pair : node.attr())
+		{
+			const auto& shape = pair.second.shape();
+			std::cout << "	" << pair.first << shape.DebugString() << "\n";
+		}
+	}
+	std::cout << "Attempting to start session...\n";
+
+	tensorflow::SessionOptions options;
+	options.config.mutable_gpu_options()->set_allow_growth(true);
+
+	(&session)->reset(tensorflow::NewSession(options));
+
+	if (!session->Create(graphDefinition).ok()) 
+	{
+		error = "Failed to create graph from .pb file.";
+	}
+}
+
+TensorFlowTOP::TensorFlowTOP(const OP_NodeInfo* info, TOP_Context* context) :
+	runGraph(false)
 {
 #ifdef WIN32
 	static bool needGLEWInit = true;
@@ -152,9 +188,8 @@ TensorFlowTOP::TensorFlowTOP(const OP_NodeInfo* info, TOP_Context* context)
 	}
 #endif
 
-	const GLchar* vertexShaderSource =
-	R"(
-		#version 430 core								
+	const GLchar* vertShaderSrc =
+		R"(#version 430 core								
 		
 		vec2 positions[6] = vec2[]( vec2(-1.0, -1.0),	// lower-left
                                     vec2( 1.0, -1.0),	// lower-right
@@ -164,52 +199,42 @@ TensorFlowTOP::TensorFlowTOP(const OP_NodeInfo* info, TOP_Context* context)
                                     vec2( 1.0,  1.0),	// upper-right
 									vec2(-1.0,  1.0));	// upper-left
 		
-		out vec2 uv;
+		out VS_OUT 
+		{
+			vec2 uv;
+		} vs_out;
 
 		void main()									
 		{			
-			uv = positions[gl_VertexID] * 0.5 + 0.5;
+			vs_out.uv = positions[gl_VertexID] * 0.5 + 0.5;
 									
 			gl_Position = vec4(positions[gl_VertexID], 0.0, 1.0);
 		}
 	)";
 
-	const GLchar* fragmentShaderSource =
-	R"(
-		#version 430 core	
+	const GLchar* fragShaderSrc =
+		R"(#version 430 core	
 		
 		layout(binding = 0) uniform sampler2D u_input;
-		in vec2 uv;
+		
+		in VS_OUT 
+		{
+			vec2 uv;
+		} fs_in;
 
 		layout(location = 0) out vec4 o_color;		
 						
 		void main()									
 		{												
-			o_color = texture(u_input, uv);			
-		}
-	)";
+			o_color = texture(u_input, fs_in.uv);			
+		})";
 
-	program = createGlslProgram(vertexShaderSource, fragmentShaderSource);
+	program = createGlslProgram(vertShaderSrc, fragShaderSrc);
 
 	glCreateVertexArrays(1, &vao);
 
 	std::string graph_path = "C:/Users/michael.walczyk/Desktop/tensorflow_top/models/inception.pb";
-	std::cout << "Attempting to load graph file...\n";
-
-	tensorflow::GraphDef graph_def;
-	if (!ReadBinaryProto(tensorflow::Env::Default(), graph_path, &graph_def).ok()) 
-	{
-		std::cout << "Failed to read protobuffer file\n";
-	}
-	std::cout << "Attempting to start session...\n";
-
-	tensorflow::SessionOptions sess_opt;
-	sess_opt.config.mutable_gpu_options()->set_allow_growth(true);
-	(&session)->reset(tensorflow::NewSession(sess_opt));
-
-	if (!session->Create(graph_def).ok()) {
-		std::cout << "Failed to create graph\n";
-	}
+	loadModel(graph_path);
 }
 
 TensorFlowTOP::~TensorFlowTOP()
@@ -230,7 +255,6 @@ bool TensorFlowTOP::getOutputFormat(TOP_OutputFormat* format)
 void TensorFlowTOP::execute(const TOP_OutputFormatSpecs* outputFormat, OP_Inputs* inputs, TOP_Context *context)
 {
 	auto topInput = inputs->getInputTOP(0);
-
 	if (topInput)
 	{	
 		// Draw the input texture.
@@ -266,7 +290,7 @@ void TensorFlowTOP::execute(const TOP_OutputFormatSpecs* outputFormat, OP_Inputs
 
 			if (!convertPixelsToTensor(&inputs, pixels, outputFormat->width, outputFormat->height, 4, expected_dims, expected_dims).ok()) 
 			{
-				std::cout << "Failed to convert pixels to tensor\n";
+				error = "Failed to convert pixels to tensor - check input and output dimensions.";
 			}
 
 			// Run the session and collect output tensors.
@@ -275,7 +299,7 @@ void TensorFlowTOP::execute(const TOP_OutputFormatSpecs* outputFormat, OP_Inputs
 			string output_layer = "softmax";
 			if (!session->Run({{input_layer, inputs[0]}}, {output_layer}, {}, &outputs).ok()) 
 			{
-				std::cout << "Failed to run model\n";
+				error = "Failed to run model on provided input.";
 			}
 
 			// Grab the index of the class with the highest score.
@@ -308,9 +332,23 @@ void TensorFlowTOP::getInfoDATEntries(int32_t index, int32_t nEntries, OP_InfoDA
 
 void TensorFlowTOP::setupParameters(OP_ParameterManager* manager)
 {
+	// A filepath parameter for loading custom models.
+	{
+		OP_StringParameter sp;
+		sp.defaultValue = "models/inception.pb";
+		sp.name = "Modelpath";
+		sp.label = "Model Path";
+
+		OP_ParAppendResult res = manager->appendFile(sp);
+		assert(res == OP_ParAppendResult::Success);
+	}
 }
 
 void TensorFlowTOP::pulsePressed(const char* name)
 {
 }
 
+const char* TensorFlowTOP::getErrorString()
+{
+	return error;
+}
