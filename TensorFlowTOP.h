@@ -57,7 +57,7 @@ public:
 	virtual void getInfoDATEntries(int32_t index, int32_t nEntries, OP_InfoDATEntries *entries) override;
 	virtual void setupParameters(OP_ParameterManager *manager) override;
 	virtual void pulsePressed(const char *name) override;
-	virtual const char* getErrorString() override;
+	//virtual const char* getErrorString() override;
 
 private:
 

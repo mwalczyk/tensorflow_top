@@ -302,6 +302,19 @@ void TensorFlowTOP::execute(const TOP_OutputFormatSpecs* outputFormat, OP_Inputs
 				error = "Failed to run model on provided input.";
 			}
 
+			auto tensor = outputs[0];
+			auto number_of_dimensions = tensor.dims();
+			std::cout << "Output tensor has " << number_of_dimensions << " dimensions\n";
+			for (size_t i = 0; i < number_of_dimensions; i++)
+			{
+				std::cout << "	dimension " << i << ": " << tensor.dim_size(i) << "\n";
+			}
+			if (number_of_dimensions > 3)
+			{
+				
+				// TODO: how do we interpret this?
+			}
+			
 			// Upload the output tensor's data store to a OpenGL texture.
 			/*auto tensor = outputs[0].flat<float>();
 			auto length = outputs[0].NumElements();
@@ -368,7 +381,7 @@ void TensorFlowTOP::pulsePressed(const char* name)
 {
 }
 
-const char* TensorFlowTOP::getErrorString()
-{
-	return error;
-}
+//const char* TensorFlowTOP::getErrorString()
+//{
+//	return error;
+//}

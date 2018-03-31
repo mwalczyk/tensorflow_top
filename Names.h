@@ -2,7 +2,8 @@
 
 #include <string>
 
-const std::string classNames[1001] = {
+const std::string classNames[1001] = 
+{
 	"dummy",
 	"kit fox",
 	"English setter",
